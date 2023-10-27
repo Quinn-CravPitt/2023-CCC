@@ -23,8 +23,8 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
-import frc.robot.RobotContainer;
 import frc.robot.Constants.ArmConstants;
+import frc.robot.RobotContainer;
 
 public class Arm extends ProfiledPIDSubsystem {
   // motor controllers
@@ -85,7 +85,6 @@ public class Arm extends ProfiledPIDSubsystem {
     SmartDashboard.putData("Arm Sim", m_mech2d);
     m_armTower.setColor(new Color8Bit(Color.kPurple));
 
-
     m_controller.disableContinuousInput();
     System.out.println("disabled");
   }
@@ -113,8 +112,7 @@ public class Arm extends ProfiledPIDSubsystem {
     m_armRight.set(speed);
   }
 
-
-  /* 
+  /*
   @Override
   public void periodic () {
     double m_absAngleRespective = (m_absoluteEncoder.getDistance() * 3 / 10) + ArmConstants.kAngleOfOffset;
@@ -130,34 +128,28 @@ public class Arm extends ProfiledPIDSubsystem {
   protected double getMeasurement() {
 
     SmartDashboard.putData("Arm PID", getController());
-    //SmartDashboard.putNumber("goal", goalAngle());
-    //SmartDashboard.putNumber("setpointVelocity", setpoint.velocity);
-    SmartDashboard.putNumber(
-        "Arm Position", m_relativeEncoder.getDistance() * 3 / 10);
-      if(!m_limitSwitch.get()){
-        m_relativeEncoder.reset();
-      }
+    SmartDashboard.putData("goal", RobotContainer.goalAngle());
+    SmartDashboard.putNumber("Arm Position", m_relativeEncoder.getDistance() * 3 / 10);
+    if (!m_limitSwitch.get()) {
+      m_relativeEncoder.reset();
+    }
     return m_relativeEncoder.getDistance() * 3 / 10;
-      
   }
-
-
 
   @Override
   protected void useOutput(double output, TrapezoidProfile.State setpoint) {
     // calculate feedforward from setpoint
     double feedforward = m_ArmFeedforward.calculate(setpoint.position, setpoint.velocity);
+    SmartDashboard.putNumber("setpointVelocity", setpoint.velocity);
     // System.out.println("Voltage" + output + feedforward);
     // add the feedforward to the PID output to get the motor output
     m_armLeft.setVoltage(output + feedforward);
     m_armRight.setInverted(true);
     m_armRight.setVoltage(output + feedforward);
     System.out.println("vel" + setpoint.velocity);
-    //System.out.println("fed"+ feedforward);
-  
+    // System.out.println("fed"+ feedforward);
+
   }
-
-
 
   @Override
   public void simulationPeriodic() {

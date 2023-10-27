@@ -8,14 +8,12 @@ import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.ShooterConstants;
-import frc.robot.commands.Autos;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -39,8 +37,8 @@ public class RobotContainer {
 
   private final Arm m_Arm = new Arm();
 
-  public double goalAngle =0;
-  public double previousAngle =0;
+  public double goalAngle = 0;
+  public double previousAngle = 0;
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
@@ -64,7 +62,6 @@ public class RobotContainer {
    * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
-
   private void configureBindings() {
 
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
@@ -75,19 +72,19 @@ public class RobotContainer {
         .onTrue(
             Commands.runOnce(
                 () -> {
-                  if(goalAngle != Math.PI/8 && previousAngle < Math.PI /8){
-                    goalAngle = Math.PI/8 - previousAngle;
+                  if (goalAngle != Math.PI / 8 && previousAngle < Math.PI / 8) {
+                    goalAngle = Math.PI / 8 - previousAngle;
                     m_Arm.setGoal(goalAngle);
                     m_Arm.enable();
                     System.out.println("goal" + goalAngle);
-                    previousAngle = Math.PI/8;
+                    previousAngle = Math.PI / 8;
 
-                  } else if(goalAngle != Math.PI/8 && previousAngle > Math.PI /8){
-                    goalAngle = 2* Math.PI-(previousAngle - Math.PI/8);
+                  } else if (goalAngle != Math.PI / 8 && previousAngle > Math.PI / 8) {
+                    goalAngle = 2 * Math.PI - (previousAngle - Math.PI / 8);
                     m_Arm.setGoal(goalAngle);
                     m_Arm.enable();
                     System.out.println("goal" + goalAngle);
-                    previousAngle = Math.PI/8;
+                    previousAngle = Math.PI / 8;
                   }
                 },
                 m_Arm));
@@ -97,19 +94,19 @@ public class RobotContainer {
         .onTrue(
             Commands.runOnce(
                 () -> {
-                  if(goalAngle != Math.PI/4 && previousAngle < Math.PI /4){
-                    goalAngle = Math.PI/4 - previousAngle;
+                  if (goalAngle != Math.PI / 4 && previousAngle < Math.PI / 4) {
+                    goalAngle = Math.PI / 4 - previousAngle;
                     m_Arm.setGoal(goalAngle);
                     m_Arm.enable();
                     System.out.println("goal" + goalAngle);
-                    previousAngle = Math.PI/4;
+                    previousAngle = Math.PI / 4;
                     System.out.println("fowards pi/4");
-                  } else if(goalAngle != Math.PI/4 && previousAngle > Math.PI /4){
-                    goalAngle = 2*Math.PI -(previousAngle - Math.PI/4);
+                  } else if (goalAngle != Math.PI / 4 && previousAngle > Math.PI / 4) {
+                    goalAngle = 2 * Math.PI - (previousAngle - Math.PI / 4);
                     m_Arm.setGoal(goalAngle);
                     m_Arm.enable();
                     System.out.println("goal" + goalAngle);
-                    previousAngle = Math.PI/4;
+                    previousAngle = Math.PI / 4;
                     System.out.println("backwards pi/4");
                   }
                 },
@@ -120,7 +117,7 @@ public class RobotContainer {
         .onTrue(
             Commands.runOnce(
                 () -> {
-                  m_Arm.setGoal(Math.PI * 17 /18);
+                  m_Arm.setGoal(Math.PI * 17 / 18);
                   m_Arm.enable();
                 },
                 m_Arm));
@@ -159,7 +156,7 @@ public class RobotContainer {
                         ShooterConstants.innerOuterSpeed, ShooterConstants.innerOuterSpeed),
                 () -> m_Shooter.ShootCube(0, 0),
                 m_Shooter));
-                
+
     // shoot cube potencial more complicated with wait command
     /*   m_XboxController
     .rightBumper()
