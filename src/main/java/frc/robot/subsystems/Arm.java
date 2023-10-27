@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.ArmConstants;
 
 public class Arm extends ProfiledPIDSubsystem {
@@ -39,8 +40,7 @@ public class Arm extends ProfiledPIDSubsystem {
       new DutyCycleEncoder(ArmConstants.ABSOLUTE_ENCODER_PORT);
 
   // Limit Switches
-  private final DigitalInput m_limitSwitch = new DigitalInput(0);
-
+  private final DigitalInput m_limitSwitch = new DigitalInput(4);
   // Simulation classes
   private SingleJointedArmSim m_ArmSim =
       new SingleJointedArmSim(
@@ -48,7 +48,6 @@ public class Arm extends ProfiledPIDSubsystem {
 
   private final EncoderSim m_relativEncoderSim = new EncoderSim(m_relativeEncoder);
 
-  private double m_relativeOffsetRadians;
   // Create arm SmartDashboard visualization
   private final Mechanism2d m_mech2d = new Mechanism2d(60, 60);
   private final MechanismRoot2d m_armPivot = m_mech2d.getRoot("ArmPivot", 30, 30);
@@ -82,10 +81,13 @@ public class Arm extends ProfiledPIDSubsystem {
     // m_relativeEncoder.reset();
     m_relativeEncoder.setDistancePerPulse(ArmConstants.relativeEncoderDistancePerPulse);
     m_absoluteEncoder.setDistancePerRotation(ArmConstants.dutyCycleEncoderDistancePerRotation);
-    m_relativeOffsetRadians = ArmConstants.kAngleOfOffset - m_absoluteEncoder.getDistance();
 
     SmartDashboard.putData("Arm Sim", m_mech2d);
     m_armTower.setColor(new Color8Bit(Color.kPurple));
+
+
+    m_controller.disableContinuousInput();
+    System.out.println("disabled");
   }
 
   private void configureMotors() {
@@ -110,47 +112,49 @@ public class Arm extends ProfiledPIDSubsystem {
     m_armRight.setInverted(true);
     m_armRight.set(speed);
   }
+
+
+  /* 
+  @Override
+  public void periodic () {
+    double m_absAngleRespective = (m_absoluteEncoder.getDistance() * 3 / 10) + ArmConstants.kAngleOfOffset;
+    //System.out.println(m_absAngleRespective);
+  } */
+
   // Return raw absolute encoder position
   public double getRawAbsolutePosition() {
     return m_absoluteEncoder.getDistance();
   }
 
   @Override
+  protected double getMeasurement() {
+
+    SmartDashboard.putData("Arm PID", getController());
+    SmartDashboard.putNumber(
+        "Arm Position", m_relativeEncoder.getDistance() * 3 / 10);
+      if(!m_limitSwitch.get()){
+        m_relativeEncoder.reset();
+      }
+    return m_relativeEncoder.getDistance() * 3 / 10;
+      
+  }
+
+
+
+  @Override
   protected void useOutput(double output, TrapezoidProfile.State setpoint) {
     // calculate feedforward from setpoint
     double feedforward = m_ArmFeedforward.calculate(setpoint.position, setpoint.velocity);
-    System.out.println("Voltage" + output + feedforward);
+    // System.out.println("Voltage" + output + feedforward);
     // add the feedforward to the PID output to get the motor output
     m_armLeft.setVoltage(output + feedforward);
     m_armRight.setInverted(true);
     m_armRight.setVoltage(output + feedforward);
-
-    // limit switch
-    /*if (m_limitSwitch.get()) {
-      m_armLeft.set(0);
-      m_armRight.set(0);
-    }*/
-  }
-  @Override
-  public void periodic() {
-    System.out.println("Angle" + m_relativeEncoder.getDistance() * 3/10 + m_relativeOffsetRadians);
-    System.out.println("Absolute angle" + m_absoluteEncoder.getDistance());
-
-    if(!m_limitSwitch.get()){
-      m_relativeEncoder.reset();
-      m_absoluteEncoder.reset();
-    }
+    System.out.println("vel" + setpoint.velocity);
+    //System.out.println("fed"+ feedforward);
+  
   }
 
-  @Override
-  protected double getMeasurement() {
-   
-
-    SmartDashboard.putData("Arm PID", getController());
-    SmartDashboard.putNumber("Arm Position", m_relativeEncoder.getDistance() * 3 / 10 + m_relativeOffsetRadians);
-    return m_relativeEncoder.getDistance() * 3 / 10 + m_relativeOffsetRadians;
-    
-  }
 
 
   @Override
