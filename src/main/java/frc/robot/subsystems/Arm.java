@@ -130,6 +130,8 @@ public class Arm extends ProfiledPIDSubsystem {
   protected double getMeasurement() {
 
     SmartDashboard.putData("Arm PID", getController());
+    //SmartDashboard.putNumber("goal", goalAngle());
+    //SmartDashboard.putNumber("setpointVelocity", setpoint.velocity);
     SmartDashboard.putNumber(
         "Arm Position", m_relativeEncoder.getDistance() * 3 / 10);
       if(!m_limitSwitch.get()){
