@@ -24,7 +24,6 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 import frc.robot.Constants.ArmConstants;
-import frc.robot.RobotContainer;
 
 public class Arm extends ProfiledPIDSubsystem {
   // motor controllers
@@ -128,8 +127,8 @@ public class Arm extends ProfiledPIDSubsystem {
   protected double getMeasurement() {
 
     SmartDashboard.putData("Arm PID", getController());
-    SmartDashboard.putData("goal", RobotContainer.goalAngle());
-    SmartDashboard.putNumber("Arm Position", m_relativeEncoder.getDistance() * 3 / 10);
+    //SmartDashboard.putNumber("Arm Position", m_relativeEncoder.getDistance() * 3 / 10);
+    SmartDashboard.putNumber("goal", 5);
     if (!m_limitSwitch.get()) {
       m_relativeEncoder.reset();
     }

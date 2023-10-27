@@ -1,10 +1,9 @@
 {
   "NetworkTables": {
-    "Retained Values": {
-      "open": false
-    },
-    "Transitory Values": {
-      "open": false
+    "retained": {
+      "SmartDashboard": {
+        "open": true
+      }
     },
     "transitory": {
       "LiveWindow": {
@@ -13,6 +12,15 @@
         }
       },
       "Shuffleboard": {
+        "open": true
+      },
+      "SmartDashboard": {
+        "Arm Sim": {
+          "ArmPivot": {
+            "open": true
+          },
+          "open": true
+        },
         "open": true
       }
     },
@@ -27,9 +35,6 @@
         }
       }
     }
-  },
-  "NetworkTables Log": {
-    "visible": true
   },
   "NetworkTables Settings": {
     "listenAddress": "localhost",
