@@ -43,6 +43,7 @@ public class Arm extends ProfiledPIDSubsystem {
   // goal angle is the distance from where the arm is to where you want the arm to be
   public double goalAngle = 0;
   public double calledAngle = 0;
+  public boolean moveForward;
 
   // Simulation classes
   private SingleJointedArmSim m_ArmSim =
@@ -93,11 +94,14 @@ public class Arm extends ProfiledPIDSubsystem {
   public void backInvertMotors() {
     m_armLeft.setInverted(true);
     m_armRight.setInverted(false);
+    moveForward = false;
+
   }
 
   public void forwardInvertMotors() {
     m_armLeft.setInverted(false);
     m_armRight.setInverted(true);
+    moveForward = true;
   }
  
   /* 
@@ -183,11 +187,21 @@ public class Arm extends ProfiledPIDSubsystem {
   @Override
   protected double getMeasurement() {
 
+    return m_relativeEncoder.getDistance() * 3 / 10;
+  }
+
+  @Override
+  public void periodic() {
+      
     if (!m_limitSwitch.get()) {
       m_relativeEncoder.reset();
       m_absoluteEncoder.reset();
+      
     }
-    return m_relativeEncoder.getDistance() * 3 / 10;
+    if(!m_limitSwitch.get() && moveForward == false){
+      disable();
+    }
+      super.periodic();
   }
 
   @Override
