@@ -108,17 +108,17 @@ public class RobotContainer {
                 () -> {
                   
 
-                  if((m_Arm.m_absoluteEncoder.getDistance() * 3 / 10) < Math.PI){
+                  if((m_Arm.m_absoluteEncoder.getDistance() * 3 / 10) < Math.PI/2){
 
-                    goalAngle = Math.PI - (m_Arm.m_absoluteEncoder.getDistance() * 3 / 10);
+                    goalAngle = Math.PI/2 - (m_Arm.m_absoluteEncoder.getDistance() * 3 / 10);
                     m_Arm.forwardInvertMotors();
                     m_Arm.setGoal(goalAngle);
                     m_Arm.enable();
 
                   }
-                  else if((m_Arm.m_absoluteEncoder.getDistance()*3/10) > Math.PI){
+                  else if((m_Arm.m_absoluteEncoder.getDistance()*3/10) > Math.PI/2){
 
-                      goalAngle = ((m_Arm.m_absoluteEncoder.getDistance() *3/10 ) - Math.PI);
+                      goalAngle = ((m_Arm.m_absoluteEncoder.getDistance() *3/10 ) - Math.PI/2);
                       m_Arm.backInvertMotors();
                       m_Arm.setGoal(goalAngle);
                       m_Arm.enable();
