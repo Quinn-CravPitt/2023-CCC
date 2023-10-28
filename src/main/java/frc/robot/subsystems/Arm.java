@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 import frc.robot.Constants.ArmConstants;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 
 public class Arm extends ProfiledPIDSubsystem {
@@ -85,10 +86,10 @@ public class Arm extends ProfiledPIDSubsystem {
     SmartDashboard.putData("Arm Sim", m_mech2d);
     m_armTower.setColor(new Color8Bit(Color.kPurple));
 
-    //m_controller.disableContinuousInput();
+    m_controller.disableContinuousInput();
   }
 
-  /* 
+  
   public void backInvertMotors() {
     m_armLeft.setInverted(true);
     m_armRight.setInverted(false);
@@ -99,7 +100,7 @@ public class Arm extends ProfiledPIDSubsystem {
     m_armRight.setInverted(true);
   }
 
-  */
+  
 
   private void configureMotors() {
     m_armLeft.restoreFactoryDefaults();
@@ -130,9 +131,6 @@ public class Arm extends ProfiledPIDSubsystem {
   }
 
 
-         // error message appears here
-
-
   @Override
   protected double getMeasurement() {
 
@@ -153,7 +151,7 @@ public class Arm extends ProfiledPIDSubsystem {
     // System.out.println("Voltage" + output + feedforward);
     // add the feedforward to the PID output to get the motor output
     m_armLeft.setVoltage(output + feedforward);
-    m_armRight.setInverted(true);
+    //m_armRight.setInverted(true);
     m_armRight.setVoltage(output + feedforward);
     // System.out.println("vel" + setpoint.velocity);
     // System.out.println("fed"+ feedforward);

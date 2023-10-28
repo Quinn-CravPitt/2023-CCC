@@ -36,11 +36,11 @@ public final class Constants {
 
     public static final double frontShooterSpeed = .5;
 
-    public static final double backIndexSpeed = .3;
+    public static final double backIndexSpeed = .5;
 
     public static final double innerOuterSpeed = .5;
 
-    public static final double innerOuterSpeedReversed = -.1;
+    public static final double innerOuterSpeedReversed = -.3;
   }
 
   

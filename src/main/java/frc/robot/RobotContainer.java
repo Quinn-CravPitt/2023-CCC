@@ -42,14 +42,20 @@ public class RobotContainer {
   public double goalAngle =0;
   public double previousAngle =0;
 
+  public float rearArm = 0;
+  public float raisedArm = 90;
+  public float frontArm = 175;
+
+
   //private final SendableChooser<Command> m_autoChooser = new SendableChooser<>();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    /* 
-    m_autoChooser.setDefaultOption("Score High", Autos.scoreHighTier());
+     
+    //m_autoChooser.setDefaultOption("Score High", Autos.scoreHighTier()); 
     // Configure the trigger bindings
-    configureBindings(); */
+
+    configureBindings(); 
 
     m_DriveTrain.setDefaultCommand(
         new RunCommand(
@@ -81,19 +87,20 @@ public class RobotContainer {
         .onTrue(
             Commands.runOnce(
                 () -> {
-                  if (goalAngle != Math.PI / 8 && previousAngle < Math.PI / 8) {
+                  if (previousAngle != Math.PI / 8 && previousAngle < Math.PI /8) {
 
-                    goalAngle = Math.PI / 8 - previousAngle;
-                    //m_Arm.forwardInvertMotors();
+                    goalAngle = (Math.PI /8) - previousAngle;
+                    m_Arm.forwardInvertMotors();
                     m_Arm.setGoal(goalAngle);
                     m_Arm.enable();
-                    previousAngle = Math.PI / 8;
+                    previousAngle = Math.PI /8;
                     System.out.println("goal" + goalAngle);
 
-                  } else if (goalAngle != Math.PI / 8 && previousAngle > Math.PI / 8) {
+                  } else if (previousAngle != Math.PI / 8 && previousAngle > Math.PI / 8) {
 
+                    System.out.println("goal" + goalAngle);
                     goalAngle = -(previousAngle - Math.PI / 8);
-                    //m_Arm.backInvertMotors();
+                    m_Arm.backInvertMotors();
                     m_Arm.setGoal(goalAngle);
                     m_Arm.enable();
                     previousAngle = Math.PI / 8;
@@ -108,23 +115,24 @@ public class RobotContainer {
         .onTrue(
             Commands.runOnce(
                 () -> {
-                  if (goalAngle != Math.PI / 4 && previousAngle < Math.PI / 4) {
+                  if (previousAngle != Math.PI / 2 && previousAngle < Math.PI / 2) {
 
-                    goalAngle = Math.PI / 4 - previousAngle;
-                    //m_Arm.forwardInvertMotors();
+                    goalAngle = Math.PI / 2 - previousAngle;
+                    m_Arm.forwardInvertMotors();
                     m_Arm.setGoal(goalAngle);
                     m_Arm.enable();
-                    previousAngle = Math.PI / 4;
+                    previousAngle = Math.PI / 2;
                     System.out.println("goal" + goalAngle);
 
-                  } else if (goalAngle != Math.PI / 4 && previousAngle > Math.PI / 4) {
+                  } else if (previousAngle != Math.PI / 2 && previousAngle > Math.PI / 2) {
 
-                    goalAngle = -(previousAngle - Math.PI / 4);
-                    //m_Arm.backInvertMotors();
+                    goalAngle = -(previousAngle - Math.PI / 2);
+                    m_Arm.backInvertMotors();
                     m_Arm.setGoal(goalAngle);
                     m_Arm.enable();
-                    previousAngle = Math.PI / 4;
+                    previousAngle = Math.PI / 2;
                     System.out.println("goal" + goalAngle);
+                    
                     
                   }
                 },
@@ -135,22 +143,22 @@ public class RobotContainer {
         .onTrue(
             Commands.runOnce(
                 () -> {
-                  if (goalAngle != Math.PI * 35 / 36 && previousAngle < Math.PI * 35 / 36) {
+                  if (previousAngle != Math.PI * 174 / 180 && previousAngle < Math.PI * 174 / 180) {
 
-                    goalAngle = Math.PI * 35 / 36 - previousAngle;
-                    //m_Arm.forwardInvertMotors();
+                    goalAngle = Math.PI * 174 / 180 - previousAngle;
+                    m_Arm.forwardInvertMotors();
                     m_Arm.setGoal(goalAngle);
                     m_Arm.enable();
-                    previousAngle = Math.PI * 35 / 36;
+                    previousAngle = Math.PI * 174 / 180;
                     System.out.println("goal" + goalAngle);
 
-                  } else if (goalAngle != Math.PI * 35 / 36 && previousAngle > Math.PI * 35 / 36) {
+                  } else if (previousAngle != Math.PI * 174 / 180 && previousAngle > Math.PI * 174 / 180) {
 
-                    goalAngle = (previousAngle - Math.PI * 35 / 36);
-                    //m_Arm.backInvertMotors();
+                    goalAngle = (previousAngle - Math.PI * 174 / 180);
+                    m_Arm.backInvertMotors();
                     m_Arm.setGoal(goalAngle);
                     m_Arm.enable();
-                    previousAngle = Math.PI * 35 / 36;
+                    previousAngle = Math.PI * 174 / 180;
                     System.out.println("goal" + goalAngle);
 
                   }
