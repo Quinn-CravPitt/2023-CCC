@@ -147,8 +147,8 @@ public class Arm extends ProfiledPIDSubsystem {
   protected void useOutput(double output, TrapezoidProfile.State setpoint) {
     // calculate feedforward from setpoint
     double feedforward = m_ArmFeedforward.calculate(setpoint.position, setpoint.velocity);
-    //SmartDashboard.putNumber("setpointVelocity", setpoint.velocity);
-    // System.out.println("Voltage" + output + feedforward);
+    System.out.println("setpoint.position" + setpoint.position);
+    //System.out.print("setpoint velocity"+ setpoint.velocity);
     // add the feedforward to the PID output to get the motor output
     m_armLeft.setVoltage(output + feedforward);
     //m_armRight.setInverted(true);
