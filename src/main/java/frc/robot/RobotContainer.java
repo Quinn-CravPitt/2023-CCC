@@ -128,7 +128,6 @@ public class RobotContainer {
                       m_Arm.enable();
 
                   }
-
                 },
                 m_Arm));
 
@@ -136,7 +135,7 @@ public class RobotContainer {
 
     // intake cube
     m_XboxController
-        .leftBumper()
+        .leftTrigger()
         .whileTrue(
             new StartEndCommand(
                 () ->
@@ -148,23 +147,34 @@ public class RobotContainer {
 
     // Shoot cube
     m_XboxController
-        .rightBumper()
+        .leftBumper()
         .whileTrue(
             new StartEndCommand(
                 () ->
                     m_Shooter.ShootCube(
-                        ShooterConstants.shootMidSpeed, ShooterConstants.shootMidSpeed),
+                        ShooterConstants.shootLowSpeed, ShooterConstants.shootLowSpeed),
                 () -> m_Shooter.ShootCube(0, 0),
                 m_Shooter));
                 
     m_XboxController
-      .leftTrigger()
+      .rightBumper()
       .whileTrue(
         new StartEndCommand(
             () ->
                 m_Shooter.IntakeCube(
-                    ShooterConstants.intakeSpeed,
-                    ShooterConstants.intakeSpeed),
+                    ShooterConstants.shootMidSpeed,
+                    ShooterConstants.shootMidSpeed),
+            () -> m_Shooter.IntakeCube(0, 0),
+            m_Shooter));
+
+    m_XboxController
+      .rightTrigger()
+      .whileTrue(
+        new StartEndCommand(
+            () ->
+                m_Shooter.IntakeCube(
+                    ShooterConstants.shootHighSpeed,
+                    ShooterConstants.shootHighSpeed),
             () -> m_Shooter.IntakeCube(0, 0),
             m_Shooter));
 
