@@ -5,7 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
-//import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -92,7 +92,7 @@ public class RobotContainer {
 
                   } else if (goalAngle != Math.PI / 8 && previousAngle > Math.PI / 8) {
 
-                    goalAngle = (previousAngle - Math.PI / 8);
+                    goalAngle = -(previousAngle - Math.PI / 8);
                     //m_Arm.backInvertMotors();
                     m_Arm.setGoal(goalAngle);
                     m_Arm.enable();
@@ -109,19 +109,23 @@ public class RobotContainer {
             Commands.runOnce(
                 () -> {
                   if (goalAngle != Math.PI / 4 && previousAngle < Math.PI / 4) {
+
                     goalAngle = Math.PI / 4 - previousAngle;
                     //m_Arm.forwardInvertMotors();
                     m_Arm.setGoal(goalAngle);
                     m_Arm.enable();
                     previousAngle = Math.PI / 4;
                     System.out.println("goal" + goalAngle);
+
                   } else if (goalAngle != Math.PI / 4 && previousAngle > Math.PI / 4) {
-                    goalAngle = (previousAngle - Math.PI / 4);
+
+                    goalAngle = -(previousAngle - Math.PI / 4);
                     //m_Arm.backInvertMotors();
                     m_Arm.setGoal(goalAngle);
                     m_Arm.enable();
                     previousAngle = Math.PI / 4;
                     System.out.println("goal" + goalAngle);
+                    
                   }
                 },
                 m_Arm));
@@ -132,19 +136,23 @@ public class RobotContainer {
             Commands.runOnce(
                 () -> {
                   if (goalAngle != Math.PI * 35 / 36 && previousAngle < Math.PI * 35 / 36) {
+
                     goalAngle = Math.PI * 35 / 36 - previousAngle;
                     //m_Arm.forwardInvertMotors();
                     m_Arm.setGoal(goalAngle);
                     m_Arm.enable();
                     previousAngle = Math.PI * 35 / 36;
                     System.out.println("goal" + goalAngle);
+
                   } else if (goalAngle != Math.PI * 35 / 36 && previousAngle > Math.PI * 35 / 36) {
+
                     goalAngle = (previousAngle - Math.PI * 35 / 36);
                     //m_Arm.backInvertMotors();
                     m_Arm.setGoal(goalAngle);
                     m_Arm.enable();
                     previousAngle = Math.PI * 35 / 36;
                     System.out.println("goal" + goalAngle);
+
                   }
                 },
                 m_Arm));
