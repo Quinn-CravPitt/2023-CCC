@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+//import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -17,6 +18,7 @@ import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Shooter;
+import frc.robot.commands.Autos;
 
 /*
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -24,6 +26,8 @@ import frc.robot.subsystems.Shooter;
  * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
  * subsystems, commands, and trigger mappings) should be declared here.
  */
+
+
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
@@ -35,13 +39,17 @@ public class RobotContainer {
   private final Shooter m_Shooter = new Shooter();
 
   private final Arm m_Arm = new Arm();
+  public double goalAngle =0;
+  public double previousAngle =0;
 
-  public double goalAngle = 0;
-  public double previousAngle = 0;
+  //private final SendableChooser<Command> m_autoChooser = new SendableChooser<>();
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    /* 
+    m_autoChooser.setDefaultOption("Score High", Autos.scoreHighTier());
     // Configure the trigger bindings
-    configureBindings();
+    configureBindings(); */
 
     m_DriveTrain.setDefaultCommand(
         new RunCommand(
@@ -49,8 +57,10 @@ public class RobotContainer {
                 m_DriveTrain.arcadeDrive(
                     m_Joystick.getRawAxis(OperatorConstants.JOYSTICK_Y_AXIS),
                     m_Joystick.getRawAxis(OperatorConstants.JOYSTICK_X_AXIS)),
-            m_DriveTrain));
+            m_DriveTrain)); 
   }
+
+  
 
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
@@ -72,18 +82,23 @@ public class RobotContainer {
             Commands.runOnce(
                 () -> {
                   if (goalAngle != Math.PI / 8 && previousAngle < Math.PI / 8) {
+
                     goalAngle = Math.PI / 8 - previousAngle;
+                    //m_Arm.forwardInvertMotors();
                     m_Arm.setGoal(goalAngle);
                     m_Arm.enable();
-                    System.out.println("goal" + goalAngle);
                     previousAngle = Math.PI / 8;
+                    System.out.println("goal" + goalAngle);
 
                   } else if (goalAngle != Math.PI / 8 && previousAngle > Math.PI / 8) {
-                    goalAngle = 2 * Math.PI - (previousAngle - Math.PI / 8);
+
+                    goalAngle = (previousAngle - Math.PI / 8);
+                    //m_Arm.backInvertMotors();
                     m_Arm.setGoal(goalAngle);
                     m_Arm.enable();
-                    System.out.println("goal" + goalAngle);
                     previousAngle = Math.PI / 8;
+                    System.out.println("goal" + goalAngle);
+
                   }
                 },
                 m_Arm));
@@ -95,29 +110,19 @@ public class RobotContainer {
                 () -> {
                   if (goalAngle != Math.PI / 4 && previousAngle < Math.PI / 4) {
                     goalAngle = Math.PI / 4 - previousAngle;
+                    //m_Arm.forwardInvertMotors();
                     m_Arm.setGoal(goalAngle);
                     m_Arm.enable();
-                    System.out.println("goal" + goalAngle);
                     previousAngle = Math.PI / 4;
-                    System.out.println("fowards pi/4");
+                    System.out.println("goal" + goalAngle);
                   } else if (goalAngle != Math.PI / 4 && previousAngle > Math.PI / 4) {
-                    goalAngle = 2 * Math.PI - (previousAngle - Math.PI / 4);
+                    goalAngle = (previousAngle - Math.PI / 4);
+                    //m_Arm.backInvertMotors();
                     m_Arm.setGoal(goalAngle);
                     m_Arm.enable();
-                    System.out.println("goal" + goalAngle);
                     previousAngle = Math.PI / 4;
-                    System.out.println("backwards pi/4");
+                    System.out.println("goal" + goalAngle);
                   }
-                },
-                m_Arm));
-
-    m_XboxController
-        .a()
-        .onTrue(
-            Commands.runOnce(
-                () -> {
-                  m_Arm.setGoal(Math.PI * 17 / 18);
-                  m_Arm.enable();
                 },
                 m_Arm));
 
@@ -126,8 +131,21 @@ public class RobotContainer {
         .onTrue(
             Commands.runOnce(
                 () -> {
-                  m_Arm.setGoal(-Math.PI / 4);
-                  m_Arm.enable();
+                  if (goalAngle != Math.PI * 35 / 36 && previousAngle < Math.PI * 35 / 36) {
+                    goalAngle = Math.PI * 35 / 36 - previousAngle;
+                    //m_Arm.forwardInvertMotors();
+                    m_Arm.setGoal(goalAngle);
+                    m_Arm.enable();
+                    previousAngle = Math.PI * 35 / 36;
+                    System.out.println("goal" + goalAngle);
+                  } else if (goalAngle != Math.PI * 35 / 36 && previousAngle > Math.PI * 35 / 36) {
+                    goalAngle = (previousAngle - Math.PI * 35 / 36);
+                    //m_Arm.backInvertMotors();
+                    m_Arm.setGoal(goalAngle);
+                    m_Arm.enable();
+                    previousAngle = Math.PI * 35 / 36;
+                    System.out.println("goal" + goalAngle);
+                  }
                 },
                 m_Arm));
 

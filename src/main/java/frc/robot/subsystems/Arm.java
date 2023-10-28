@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 import frc.robot.Constants.ArmConstants;
+import frc.robot.RobotContainer;
 
 public class Arm extends ProfiledPIDSubsystem {
   // motor controllers
@@ -84,9 +85,21 @@ public class Arm extends ProfiledPIDSubsystem {
     SmartDashboard.putData("Arm Sim", m_mech2d);
     m_armTower.setColor(new Color8Bit(Color.kPurple));
 
-    m_controller.disableContinuousInput();
-    System.out.println("disabled");
+    //m_controller.disableContinuousInput();
   }
+
+  /* 
+  public void backInvertMotors() {
+    m_armLeft.setInverted(true);
+    m_armRight.setInverted(false);
+  }
+
+  public void forwardInvertMotors() {
+    m_armLeft.setInverted(false);
+    m_armRight.setInverted(true);
+  }
+
+  */
 
   private void configureMotors() {
     m_armLeft.restoreFactoryDefaults();
@@ -111,24 +124,21 @@ public class Arm extends ProfiledPIDSubsystem {
     m_armRight.set(speed);
   }
 
-  /*
-  @Override
-  public void periodic () {
-    double m_absAngleRespective = (m_absoluteEncoder.getDistance() * 3 / 10) + ArmConstants.kAngleOfOffset;
-    //System.out.println(m_absAngleRespective);
-  } */
-
   // Return raw absolute encoder position
   public double getRawAbsolutePosition() {
     return m_absoluteEncoder.getDistance();
   }
 
+
+         // error message appears here
+
+
   @Override
   protected double getMeasurement() {
 
-    SmartDashboard.putData("Arm PID", getController());
+    //SmartDashboard.putData("Arm PID", getController());
     //SmartDashboard.putNumber("Arm Position", m_relativeEncoder.getDistance() * 3 / 10);
-    SmartDashboard.putNumber("goal", 5);
+    //SmartDashboard.putNumber("goal", RobotContainer.previousAngle);
     if (!m_limitSwitch.get()) {
       m_relativeEncoder.reset();
     }
@@ -139,13 +149,13 @@ public class Arm extends ProfiledPIDSubsystem {
   protected void useOutput(double output, TrapezoidProfile.State setpoint) {
     // calculate feedforward from setpoint
     double feedforward = m_ArmFeedforward.calculate(setpoint.position, setpoint.velocity);
-    SmartDashboard.putNumber("setpointVelocity", setpoint.velocity);
+    //SmartDashboard.putNumber("setpointVelocity", setpoint.velocity);
     // System.out.println("Voltage" + output + feedforward);
     // add the feedforward to the PID output to get the motor output
     m_armLeft.setVoltage(output + feedforward);
     m_armRight.setInverted(true);
     m_armRight.setVoltage(output + feedforward);
-    System.out.println("vel" + setpoint.velocity);
+    // System.out.println("vel" + setpoint.velocity);
     // System.out.println("fed"+ feedforward);
 
   }
