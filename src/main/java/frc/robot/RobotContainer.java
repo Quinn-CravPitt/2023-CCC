@@ -87,26 +87,20 @@ public class RobotContainer {
         .onTrue(
             Commands.runOnce(
                 () -> {
-                  if (previousAngle != Math.PI / 8 && previousAngle < Math.PI /8) {
 
-                    goalAngle = (Math.PI /8) - previousAngle;
-                    m_Arm.forwardInvertMotors();
-                    m_Arm.setGoal(goalAngle);
-                    m_Arm.enable();
-                    previousAngle = Math.PI /8;
-                    System.out.println("goal" + goalAngle);
+                  if(m_Arm.backLS == false){
 
-                  } else if (previousAngle != Math.PI / 8 && previousAngle > Math.PI / 8) {
-
-                    System.out.println("goal" + goalAngle);
-                    goalAngle = -(previousAngle - Math.PI / 8);
+                    m_Arm.setGoal(180);
                     m_Arm.backInvertMotors();
-                    m_Arm.setGoal(goalAngle);
                     m_Arm.enable();
-                    previousAngle = Math.PI / 8;
-                    System.out.println("goal" + goalAngle);
 
+                    System.out.println("arm going back");
                   }
+                  else {
+                    m_Arm.setGoal(0);
+                    m_Arm.disable();
+                  }
+
                 },
                 m_Arm));
 
@@ -115,52 +109,17 @@ public class RobotContainer {
         .onTrue(
             Commands.runOnce(
                 () -> {
-                  if (previousAngle != Math.PI / 2 && previousAngle < Math.PI / 2) {
+                  if(m_Arm.frontLS == false){
 
-                    goalAngle = Math.PI / 2 - previousAngle;
+                    m_Arm.setGoal(180);
                     m_Arm.forwardInvertMotors();
-                    m_Arm.setGoal(goalAngle);
                     m_Arm.enable();
-                    previousAngle = Math.PI / 2;
-                    System.out.println("goal" + goalAngle);
 
-                  } else if (previousAngle != Math.PI / 2 && previousAngle > Math.PI / 2) {
-
-                    goalAngle = -(previousAngle - Math.PI / 2);
-                    m_Arm.backInvertMotors();
-                    m_Arm.setGoal(goalAngle);
-                    m_Arm.enable();
-                    previousAngle = Math.PI / 2;
-                    System.out.println("goal" + goalAngle);
-                    
-                    
+                    System.out.println("arm going forward");
                   }
-                },
-                m_Arm));
-
-    m_XboxController
-        .b()
-        .onTrue(
-            Commands.runOnce(
-                () -> {
-                  if (previousAngle != Math.PI * 174 / 180 && previousAngle < Math.PI * 174 / 180) {
-
-                    goalAngle = Math.PI * 174 / 180 - previousAngle;
-                    m_Arm.forwardInvertMotors();
-                    m_Arm.setGoal(goalAngle);
-                    m_Arm.enable();
-                    previousAngle = Math.PI * 174 / 180;
-                    System.out.println("goal" + goalAngle);
-
-                  } else if (previousAngle != Math.PI * 174 / 180 && previousAngle > Math.PI * 174 / 180) {
-
-                    goalAngle = (previousAngle - Math.PI * 174 / 180);
-                    m_Arm.backInvertMotors();
-                    m_Arm.setGoal(goalAngle);
-                    m_Arm.enable();
-                    previousAngle = Math.PI * 174 / 180;
-                    System.out.println("goal" + goalAngle);
-
+                  else{
+                    m_Arm.setGoal(0);
+                    m_Arm.disable();
                   }
                 },
                 m_Arm));
@@ -189,18 +148,6 @@ public class RobotContainer {
                         ShooterConstants.innerOuterSpeed, ShooterConstants.innerOuterSpeed),
                 () -> m_Shooter.ShootCube(0, 0),
                 m_Shooter));
-
-    // shoot cube potencial more complicated with wait command
-    /*   m_XboxController
-    .rightBumper()
-    .whileTrue(
-        Commands.sequence(
-            new RunCommand(
-                () -> {
-                  m_Shooter.runShooter(ShooterConstants.innerOuterSpeed);
-                  new WaitCommand(.25);
-                  m_Shooter.runIndex(ShooterConstants.innerOuterSpeed);
-         }))); */
   }
 
   /**

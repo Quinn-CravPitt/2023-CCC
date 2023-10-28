@@ -41,7 +41,13 @@ public class Arm extends ProfiledPIDSubsystem {
       new DutyCycleEncoder(ArmConstants.ABSOLUTE_ENCODER_PORT);
 
   // Limit Switches
-  private final DigitalInput m_limitSwitch = new DigitalInput(4);
+  private final DigitalInput m_backlimitSwitch = new DigitalInput(4);
+  private final DigitalInput m_frontlimitSwitch = new DigitalInput(3);
+
+  public double goalAngle;
+  public boolean frontLS = false;
+  public boolean backLS = false;
+
   // Simulation classes
   private SingleJointedArmSim m_ArmSim =
       new SingleJointedArmSim(
@@ -137,8 +143,17 @@ public class Arm extends ProfiledPIDSubsystem {
     //SmartDashboard.putData("Arm PID", getController());
     //SmartDashboard.putNumber("Arm Position", m_relativeEncoder.getDistance() * 3 / 10);
     //SmartDashboard.putNumber("goal", RobotContainer.previousAngle);
-    if (!m_limitSwitch.get()) {
-      m_relativeEncoder.reset();
+    if (!m_backlimitSwitch.get()) {
+      backLS = true;
+    }
+    else{
+      backLS = false;
+    }
+    if (!m_frontlimitSwitch.get()) {
+      frontLS = true;
+    }
+    else{
+      frontLS = false;
     }
     return m_relativeEncoder.getDistance() * 3 / 10;
   }
