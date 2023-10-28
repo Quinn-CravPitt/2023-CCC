@@ -18,14 +18,11 @@ import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 import frc.robot.Constants.ArmConstants;
-import frc.robot.Robot;
-import frc.robot.RobotContainer;
 
 public class Arm extends ProfiledPIDSubsystem {
   // motor controllers
@@ -42,6 +39,11 @@ public class Arm extends ProfiledPIDSubsystem {
 
   // Limit Switches
   private final DigitalInput m_limitSwitch = new DigitalInput(4);
+
+  // goal angle is the distance from where the arm is to where you want the arm to be
+  public double goalAngle = 0;
+  public double calledAngle = 0;
+
   // Simulation classes
   private SingleJointedArmSim m_ArmSim =
       new SingleJointedArmSim(
@@ -83,13 +85,11 @@ public class Arm extends ProfiledPIDSubsystem {
     m_relativeEncoder.setDistancePerPulse(ArmConstants.relativeEncoderDistancePerPulse);
     m_absoluteEncoder.setDistancePerRotation(ArmConstants.dutyCycleEncoderDistancePerRotation);
 
-    SmartDashboard.putData("Arm Sim", m_mech2d);
     m_armTower.setColor(new Color8Bit(Color.kPurple));
 
     m_controller.disableContinuousInput();
   }
 
-  
   public void backInvertMotors() {
     m_armLeft.setInverted(true);
     m_armRight.setInverted(false);
@@ -100,7 +100,56 @@ public class Arm extends ProfiledPIDSubsystem {
     m_armRight.setInverted(true);
   }
 
-  
+  protected void changeArmAngle() {
+    if (calledAngle == 0 && (m_absoluteEncoder.getDistance() * 3 / 10) > Math.PI / 90) {
+      goalAngle = (m_absoluteEncoder.getDistance() * 3 / 10) - Math.PI / 90;
+      backInvertMotors();
+      setGoal(goalAngle);
+      enable();
+
+      System.out.println("going back to 0");
+    }
+
+    if (calledAngle == Math.PI / 2
+        && (m_absoluteEncoder.getDistance() * 3 / 10) < Math.PI * 91 / 180) {
+      goalAngle = Math.PI / 2 - (m_absoluteEncoder.getDistance() * 3 / 10);
+      forwardInvertMotors();
+      setGoal(goalAngle);
+      enable();
+
+      System.out.println("going forward to pi/2");
+    }
+
+    if (calledAngle == Math.PI / 2
+        && (m_absoluteEncoder.getDistance() * 3 / 10) > Math.PI * 89 / 90) {
+      goalAngle = (m_absoluteEncoder.getDistance() * 3 / 10) - Math.PI / 2;
+      backInvertMotors();
+      setGoal(goalAngle);
+      enable();
+
+      System.out.println("going backward to pi/2");
+    }
+
+    if (calledAngle == Math.PI
+        && (m_absoluteEncoder.getDistance() * 3 / 10) < Math.PI * 178 / 180) {
+      goalAngle = Math.PI - (m_absoluteEncoder.getDistance() * 3 / 10);
+      forwardInvertMotors();
+      setGoal(goalAngle);
+      enable();
+
+      System.out.println("going forward to pi");
+    }
+
+    if (calledAngle == Math.PI * 175 / 180
+        && (m_absoluteEncoder.getDistance() * 3 / 10) > Math.PI * 182 / 180) {
+      goalAngle = (m_absoluteEncoder.getDistance() * 3 / 10) - Math.PI;
+      backInvertMotors();
+      setGoal(goalAngle);
+      enable();
+
+      System.out.println("going backward to pi");
+    }
+  }
 
   private void configureMotors() {
     m_armLeft.restoreFactoryDefaults();
@@ -121,7 +170,7 @@ public class Arm extends ProfiledPIDSubsystem {
   // runs arm with feedforward control
   public void set(double speed) {
     m_armLeft.set(speed);
-    m_armRight.setInverted(true);
+    // m_armRight.setInverted(true);
     m_armRight.set(speed);
   }
 
@@ -130,13 +179,9 @@ public class Arm extends ProfiledPIDSubsystem {
     return m_absoluteEncoder.getDistance();
   }
 
-
   @Override
   protected double getMeasurement() {
 
-    //SmartDashboard.putData("Arm PID", getController());
-    //SmartDashboard.putNumber("Arm Position", m_relativeEncoder.getDistance() * 3 / 10);
-    //SmartDashboard.putNumber("goal", RobotContainer.previousAngle);
     if (!m_limitSwitch.get()) {
       m_relativeEncoder.reset();
     }
@@ -147,15 +192,11 @@ public class Arm extends ProfiledPIDSubsystem {
   protected void useOutput(double output, TrapezoidProfile.State setpoint) {
     // calculate feedforward from setpoint
     double feedforward = m_ArmFeedforward.calculate(setpoint.position, setpoint.velocity);
-    //SmartDashboard.putNumber("setpointVelocity", setpoint.velocity);
-    // System.out.println("Voltage" + output + feedforward);
+
     // add the feedforward to the PID output to get the motor output
     m_armLeft.setVoltage(output + feedforward);
-    //m_armRight.setInverted(true);
+    // m_armRight.setInverted(true);
     m_armRight.setVoltage(output + feedforward);
-    // System.out.println("vel" + setpoint.velocity);
-    // System.out.println("fed"+ feedforward);
-
   }
 
   @Override

@@ -43,8 +43,6 @@ public final class Constants {
     public static final double innerOuterSpeedReversed = -.3;
   }
 
-  
-
   public static class ArmConstants {
     // motors
     public static final int leftArmMotorID = 5;
