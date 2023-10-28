@@ -81,12 +81,12 @@ public class RobotContainer {
         .onTrue(
             Commands.runOnce(
                 () -> {
-              
-                  goalAngle = 0 + (m_Arm.m_absoluteEncoder.getDistance() * 3/10);
+                  
+                  goalAngle = (m_Arm.m_absoluteEncoder.getDistance() * 3/10)- Math.PI/4;
                   m_Arm.backInvertMotors();
                   m_Arm.setGoal(goalAngle);
                   m_Arm.enable();
-                  
+                  System.out.println(goalAngle);
                 },
                 m_Arm));
 /* 
@@ -108,17 +108,21 @@ public class RobotContainer {
                 () -> {
                   
 
-                  if((m_Arm.m_absoluteEncoder.getDistance() * 3 / 10) < Math.PI/2){
+                  if((m_Arm.m_absoluteEncoder.getDistance() * 3 / 10) < Math.PI){
 
-                    goalAngle = Math.PI/2 - (m_Arm.m_absoluteEncoder.getDistance() * 3 / 10);
+                    System.out.println("armforward" +m_Arm.m_absoluteEncoder.getDistance()*3/10);
+
+                    goalAngle = Math.PI - (m_Arm.m_absoluteEncoder.getDistance() * 3 / 10);
                     m_Arm.forwardInvertMotors();
                     m_Arm.setGoal(goalAngle);
                     m_Arm.enable();
 
                   }
-                  else if((m_Arm.m_absoluteEncoder.getDistance()*3/10) > Math.PI/2){
+                  else if((m_Arm.m_absoluteEncoder.getDistance()*3/10) > Math.PI){
 
-                      goalAngle = ((m_Arm.m_absoluteEncoder.getDistance() *3/10 ) - Math.PI/2);
+
+                    System.out.println("armbackward" +m_Arm.m_absoluteEncoder.getDistance()*3/10);
+                      goalAngle = ((m_Arm.m_absoluteEncoder.getDistance() *3/10 ) - Math.PI);
                       m_Arm.backInvertMotors();
                       m_Arm.setGoal(goalAngle);
                       m_Arm.enable();
