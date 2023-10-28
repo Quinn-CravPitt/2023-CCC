@@ -34,13 +34,14 @@ public final class Constants {
     // right motor
     public static final int backShooterId = 8;
 
-    public static final double frontShooterSpeed = .5;
+    public static final double shootHighSpeed = 1;
 
-    public static final double backIndexSpeed = .5;
+    public static final double shootMidSpeed = .65;
 
-    public static final double innerOuterSpeed = .5;
+    public static final double shootLowSpeed = .2;
 
-    public static final double innerOuterSpeedReversed = -.3;
+    public static final double intakeSpeed = -0.3;
+
   }
 
   public static class ArmConstants {

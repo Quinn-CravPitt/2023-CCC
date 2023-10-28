@@ -30,7 +30,7 @@ public final class Autos {
         Commands.runOnce(
             (() ->
                 shooter.ShootCube(
-                    ShooterConstants.innerOuterSpeedReversed, ShooterConstants.innerOuterSpeed)),
+                    ShooterConstants.shootMidSpeed, ShooterConstants.shootMidSpeed)),
             shooter),
         Commands.runOnce(
             () -> {

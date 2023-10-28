@@ -141,8 +141,8 @@ public class RobotContainer {
             new StartEndCommand(
                 () ->
                     m_Shooter.IntakeCube(
-                        ShooterConstants.innerOuterSpeedReversed,
-                        ShooterConstants.innerOuterSpeedReversed),
+                        ShooterConstants.intakeSpeed,
+                        ShooterConstants.intakeSpeed),
                 () -> m_Shooter.IntakeCube(0, 0),
                 m_Shooter));
 
@@ -153,9 +153,20 @@ public class RobotContainer {
             new StartEndCommand(
                 () ->
                     m_Shooter.ShootCube(
-                        ShooterConstants.innerOuterSpeed, ShooterConstants.innerOuterSpeed),
+                        ShooterConstants.shootMidSpeed, ShooterConstants.shootMidSpeed),
                 () -> m_Shooter.ShootCube(0, 0),
                 m_Shooter));
+                
+    m_XboxController
+      .leftTrigger()
+      .whileTrue(
+        new StartEndCommand(
+            () ->
+                m_Shooter.IntakeCube(
+                    ShooterConstants.intakeSpeed,
+                    ShooterConstants.intakeSpeed),
+            () -> m_Shooter.IntakeCube(0, 0),
+            m_Shooter));
 
     // shoot cube potencial more complicated with wait command
     /*   m_XboxController
@@ -168,7 +179,11 @@ public class RobotContainer {
                   new WaitCommand(.25);
                   m_Shooter.runIndex(ShooterConstants.innerOuterSpeed);
          }))); */
+
+
   }
+  
+  
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
