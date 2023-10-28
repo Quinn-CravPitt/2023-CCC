@@ -89,18 +89,33 @@ public class RobotContainer {
                   System.out.println(goalAngle);
                 },
                 m_Arm));
-/* 
+ 
     m_XboxController
         .y()
         .onTrue(
             Commands.runOnce(
                 () -> {
-                  m_Arm.calledAngle = Math.PI / 2;
-                  
-                  System.out.println("calledAngle = pi/2");
+
+                  if((m_Arm.m_absoluteEncoder.getDistance() * 3 / 10) < Math.PI /2){
+
+                    goalAngle = Math.PI/2 - (m_Arm.m_absoluteEncoder.getDistance() * 3 / 10);
+                    m_Arm.forwardInvertMotors();
+                    m_Arm.setGoal(goalAngle);
+                    m_Arm.enable();
+                    
+                  }
+                  else if((m_Arm.m_absoluteEncoder.getDistance()*3/10) > Math.PI/2){
+
+                      goalAngle = ((m_Arm.m_absoluteEncoder.getDistance() *3/10 ) - Math.PI/2);
+                      m_Arm.backInvertMotors();
+                      m_Arm.setGoal(goalAngle);
+                      m_Arm.enable();
+
+                  }
                 },
                 m_Arm));
-*/
+              
+                /* 
     m_XboxController
         .b()
         .onTrue(
@@ -130,6 +145,7 @@ public class RobotContainer {
                   }
                 },
                 m_Arm));
+*/                
 
     // shooter
 
@@ -138,12 +154,31 @@ public class RobotContainer {
         .leftTrigger()
         .whileTrue(
             new StartEndCommand(
-                () ->
+                () -> { 
+
                     m_Shooter.IntakeCube(
-                        ShooterConstants.intakeSpeed,
-                        ShooterConstants.intakeSpeed),
-                () -> m_Shooter.IntakeCube(0, 0),
-                m_Shooter));
+                    ShooterConstants.intakeSpeed,
+                    ShooterConstants.intakeSpeed);
+
+                    goalAngle = Math.PI - (m_Arm.m_absoluteEncoder.getDistance() * 3 / 10);
+                    m_Arm.forwardInvertMotors();
+                    m_Arm.setGoal(goalAngle);
+                    m_Arm.enable();
+
+                }, 
+             
+                    () -> {
+
+                    m_Shooter.IntakeCube(0, 0);
+        
+                    goalAngle = (m_Arm.m_absoluteEncoder.getDistance() * 3 / 10) - Math.PI/2;
+                    m_Arm.backInvertMotors();
+                    m_Arm.setGoal(goalAngle);
+                    m_Arm.enable();
+                    
+              },
+                m_Shooter, m_Arm)
+                );
 
     // Shoot cube
     m_XboxController
