@@ -81,28 +81,50 @@ public class RobotContainer {
         .onTrue(
             Commands.runOnce(
                 () -> {
-                  m_Arm.calledAngle = 0;
-                  System.out.println("calledAngle = 0");
+              
+                  goalAngle = 0 + (m_Arm.m_absoluteEncoder.getDistance() * 3/10);
+                  m_Arm.backInvertMotors();
+                  m_Arm.setGoal(goalAngle);
+                  m_Arm.enable();
+                  
                 },
                 m_Arm));
-
+/* 
     m_XboxController
         .y()
         .onTrue(
             Commands.runOnce(
                 () -> {
                   m_Arm.calledAngle = Math.PI / 2;
+                  
                   System.out.println("calledAngle = pi/2");
                 },
                 m_Arm));
-
+*/
     m_XboxController
         .b()
         .onTrue(
             Commands.runOnce(
                 () -> {
-                  m_Arm.calledAngle = Math.PI;
-                  System.out.println("calledAngle = pi");
+                  
+
+                  if((m_Arm.m_absoluteEncoder.getDistance() * 3 / 10) < Math.PI){
+
+                    goalAngle = Math.PI - (m_Arm.m_absoluteEncoder.getDistance() * 3 / 10);
+                    m_Arm.forwardInvertMotors();
+                    m_Arm.setGoal(goalAngle);
+                    m_Arm.enable();
+
+                  }
+                  else if((m_Arm.m_absoluteEncoder.getDistance()*3/10) > Math.PI){
+
+                      goalAngle = ((m_Arm.m_absoluteEncoder.getDistance() *3/10 ) - Math.PI);
+                      m_Arm.backInvertMotors();
+                      m_Arm.setGoal(goalAngle);
+                      m_Arm.enable();
+
+                  }
+
                 },
                 m_Arm));
 

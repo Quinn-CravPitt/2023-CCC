@@ -34,7 +34,7 @@ public class Arm extends ProfiledPIDSubsystem {
   // encoders
   private final Encoder m_relativeEncoder =
       new Encoder(ArmConstants.RELATIVE_ENCODER_A, ArmConstants.RELATIVE_ENCODER_B);
-  private final DutyCycleEncoder m_absoluteEncoder =
+  public final DutyCycleEncoder m_absoluteEncoder =
       new DutyCycleEncoder(ArmConstants.ABSOLUTE_ENCODER_PORT);
 
   // Limit Switches
@@ -99,9 +99,10 @@ public class Arm extends ProfiledPIDSubsystem {
     m_armLeft.setInverted(false);
     m_armRight.setInverted(true);
   }
-
-  protected void changeArmAngle() {
-    if (calledAngle == 0 && (m_absoluteEncoder.getDistance() * 3 / 10) > Math.PI / 90) {
+ 
+  /* 
+  public void changeArmAngle() {
+    if (calledAngle == 0) {
       goalAngle = (m_absoluteEncoder.getDistance() * 3 / 10) - Math.PI / 90;
       backInvertMotors();
       setGoal(goalAngle);
@@ -109,7 +110,7 @@ public class Arm extends ProfiledPIDSubsystem {
 
       System.out.println("going back to 0");
     }
-
+ 
     if (calledAngle == Math.PI / 2
         && (m_absoluteEncoder.getDistance() * 3 / 10) < Math.PI * 91 / 180) {
       goalAngle = Math.PI / 2 - (m_absoluteEncoder.getDistance() * 3 / 10);
@@ -126,9 +127,9 @@ public class Arm extends ProfiledPIDSubsystem {
       backInvertMotors();
       setGoal(goalAngle);
       enable();
-
+ 
       System.out.println("going backward to pi/2");
-    }
+    } 
 
     if (calledAngle == Math.PI
         && (m_absoluteEncoder.getDistance() * 3 / 10) < Math.PI * 178 / 180) {
@@ -141,7 +142,7 @@ public class Arm extends ProfiledPIDSubsystem {
     }
 
     if (calledAngle == Math.PI
-        && (m_absoluteEncoder.getDistance() * 3 / 10) > Math.PI * 182 / 180) {
+        && (m_absoluteEncoder.getDistance() * 3 / 10) > Math.PI) {
       goalAngle = (m_absoluteEncoder.getDistance() * 3 / 10) - Math.PI;
       backInvertMotors();
       setGoal(goalAngle);
@@ -149,7 +150,7 @@ public class Arm extends ProfiledPIDSubsystem {
 
       System.out.println("going backward to pi");
     }
-  }
+  } */
 
   private void configureMotors() {
     m_armLeft.restoreFactoryDefaults();
@@ -184,6 +185,7 @@ public class Arm extends ProfiledPIDSubsystem {
 
     if (!m_limitSwitch.get()) {
       m_relativeEncoder.reset();
+      m_absoluteEncoder.reset();
     }
     return m_relativeEncoder.getDistance() * 3 / 10;
   }
@@ -191,6 +193,7 @@ public class Arm extends ProfiledPIDSubsystem {
   @Override
   protected void useOutput(double output, TrapezoidProfile.State setpoint) {
     // calculate feedforward from setpoint
+
     double feedforward = m_ArmFeedforward.calculate(setpoint.position, setpoint.velocity);
 
     // add the feedforward to the PID output to get the motor output
