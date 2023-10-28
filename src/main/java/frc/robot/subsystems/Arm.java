@@ -140,7 +140,7 @@ public class Arm extends ProfiledPIDSubsystem {
       System.out.println("going forward to pi");
     }
 
-    if (calledAngle == Math.PI * 175 / 180
+    if (calledAngle == Math.PI
         && (m_absoluteEncoder.getDistance() * 3 / 10) > Math.PI * 182 / 180) {
       goalAngle = (m_absoluteEncoder.getDistance() * 3 / 10) - Math.PI;
       backInvertMotors();
