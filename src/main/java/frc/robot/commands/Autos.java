@@ -61,7 +61,7 @@ public final class Autos {
             shooter));
   }
 
-  
+
   public static CommandBase scoreHighRaiseArm(Shooter shooter, Arm m_Arm, DriveTrain DifferentialDrive) {
     return Commands.sequence(
         Commands.runOnce(
@@ -87,6 +87,7 @@ public final class Autos {
               m_Arm.forwardInvertMotors();
               m_Arm.setGoal(m_Arm.goalAngle);
               m_Arm.enable();
+              m_Arm.calledAngle = Math.PI/2;
   
               },
               shooter));
