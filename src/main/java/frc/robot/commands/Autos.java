@@ -7,10 +7,12 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.subsystems.Shooter;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.Shooter;
+
+
 
 public final class Autos {
   /** Example static factory for an autonomous command. */
@@ -22,21 +24,40 @@ public final class Autos {
     return Commands.sequence(
         Commands.runOnce(
             () -> {
-              arm.setGoal(90);
-              arm.enable();
+              
+            shooter.ShootCube(ShooterConstants.shootHighSpeed, ShooterConstants.shootHighSpeed);
+
             },
-            arm),
-        new WaitCommand(0),
+            shooter),
+        //wait for x seconds to shoot cube 
+        new WaitCommand(.5),
+        
+        //set roller speeds to zero 
         Commands.runOnce(
             (() ->
                 shooter.ShootCube(
-                    ShooterConstants.shootMidSpeed, ShooterConstants.shootMidSpeed)),
-            shooter),
+                    0, 0)),
+            shooter));
+  }
+
+  public static CommandBase scoreMid(Shooter shooter, Arm arm) {
+    return Commands.sequence(
         Commands.runOnce(
             () -> {
-              arm.setGoal(null);
-              arm.enable();
-            }));
+              
+            shooter.ShootCube(ShooterConstants.shootMidSpeed, ShooterConstants.shootMidSpeed);
+
+            },
+            shooter),
+        //wait for x seconds to shoot cube 
+        new WaitCommand(.5),
+        
+        //set roller speeds to zero 
+        Commands.runOnce(
+            (() ->
+                shooter.ShootCube(
+                    0, 0)),
+            shooter));
   }
 
   private Autos() {

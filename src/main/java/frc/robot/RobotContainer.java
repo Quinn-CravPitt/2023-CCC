@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.commands.Autos;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -36,12 +37,7 @@ public class RobotContainer {
   private final Shooter m_Shooter = new Shooter();
 
   private final Arm m_Arm = new Arm();
-  public double goalAngle = 0;
-  public double previousAngle = 0;
-
-  public float rearArm = 0;
-  public float raisedArm = 90;
-  public float frontArm = 175;
+  //public double goalAngle = 0;
 
   // private final SendableChooser<Command> m_autoChooser = new SendableChooser<>();
 
@@ -82,11 +78,14 @@ public class RobotContainer {
             Commands.runOnce(
                 () -> {
                   
+                  m_Arm.calledAngle= 0;
+                  /* 
                   goalAngle = (m_Arm.m_absoluteEncoder.getDistance() * 3/10)- Math.PI/4;
                   m_Arm.backInvertMotors();
                   m_Arm.setGoal(goalAngle);
                   m_Arm.enable();
                   System.out.println(goalAngle);
+                  */
                 },
                 m_Arm));
  
@@ -96,6 +95,9 @@ public class RobotContainer {
             Commands.runOnce(
                 () -> {
 
+                  m_Arm.calledAngle= Math.PI/2;
+
+                  /* 
                   if((m_Arm.m_absoluteEncoder.getDistance() * 3 / 10) < Math.PI /2){
 
                     goalAngle = Math.PI/2 - (m_Arm.m_absoluteEncoder.getDistance() * 3 / 10);
@@ -112,17 +114,20 @@ public class RobotContainer {
                       m_Arm.enable();
 
                   }
+                  */
                 },
                 m_Arm));
               
-                /* 
+                 
     m_XboxController
         .b()
         .onTrue(
             Commands.runOnce(
                 () -> {
                   
+                  m_Arm.calledAngle = Math.PI;
 
+                  /* 
                   if((m_Arm.m_absoluteEncoder.getDistance() * 3 / 10) < Math.PI){
 
                     System.out.println("armforward" +m_Arm.m_absoluteEncoder.getDistance()*3/10);
@@ -141,11 +146,11 @@ public class RobotContainer {
                       m_Arm.backInvertMotors();
                       m_Arm.setGoal(goalAngle);
                       m_Arm.enable();
-
-                  }
+                    
+                  } */
                 },
                 m_Arm));
-*/                
+              
 
     // shooter
 
@@ -160,21 +165,29 @@ public class RobotContainer {
                     ShooterConstants.intakeSpeed,
                     ShooterConstants.intakeSpeed);
 
+                    m_Arm.calledAngle = Math.PI;
+
+                    /* 
                     goalAngle = Math.PI - (m_Arm.m_absoluteEncoder.getDistance() * 3 / 10);
                     m_Arm.forwardInvertMotors();
                     m_Arm.setGoal(goalAngle);
                     m_Arm.enable();
+                    */
 
                 }, 
              
                     () -> {
 
                     m_Shooter.IntakeCube(0, 0);
-        
+
+                    m_Arm.calledAngle = Math.PI/2;
+
+                    /* 
                     goalAngle = (m_Arm.m_absoluteEncoder.getDistance() * 3 / 10) - Math.PI/2;
                     m_Arm.backInvertMotors();
                     m_Arm.setGoal(goalAngle);
                     m_Arm.enable();
+                    */
                     
               },
                 m_Shooter, m_Arm)
@@ -196,10 +209,10 @@ public class RobotContainer {
       .whileTrue(
         new StartEndCommand(
             () ->
-                m_Shooter.IntakeCube(
+                m_Shooter.ShootCube(
                     ShooterConstants.shootMidSpeed,
                     ShooterConstants.shootMidSpeed),
-            () -> m_Shooter.IntakeCube(0, 0),
+            () -> m_Shooter.ShootCube(0, 0),
             m_Shooter));
 
     m_XboxController
@@ -207,10 +220,10 @@ public class RobotContainer {
       .whileTrue(
         new StartEndCommand(
             () ->
-                m_Shooter.IntakeCube(
+                m_Shooter.ShootCube(
                     ShooterConstants.shootHighSpeed,
                     ShooterConstants.shootHighSpeed),
-            () -> m_Shooter.IntakeCube(0, 0),
+            () -> m_Shooter.ShootCube(0, 0),
             m_Shooter));
 
     // shoot cube potencial more complicated with wait command
@@ -236,7 +249,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return null;
+    return Autos.scoreHigh(m_Shooter, m_Arm);
     // An example command will be run in autonomous
 
   }

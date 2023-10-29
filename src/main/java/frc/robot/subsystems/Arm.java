@@ -103,58 +103,6 @@ public class Arm extends ProfiledPIDSubsystem {
     m_armRight.setInverted(true);
     moveForward = true;
   }
- 
-  /* 
-  public void changeArmAngle() {
-    if (calledAngle == 0) {
-      goalAngle = (m_absoluteEncoder.getDistance() * 3 / 10) - Math.PI / 90;
-      backInvertMotors();
-      setGoal(goalAngle);
-      enable();
-
-      System.out.println("going back to 0");
-    }
- 
-    if (calledAngle == Math.PI / 2
-        && (m_absoluteEncoder.getDistance() * 3 / 10) < Math.PI * 91 / 180) {
-      goalAngle = Math.PI / 2 - (m_absoluteEncoder.getDistance() * 3 / 10);
-      forwardInvertMotors();
-      setGoal(goalAngle);
-      enable();
-
-      System.out.println("going forward to pi/2");
-    }
-
-    if (calledAngle == Math.PI / 2
-        && (m_absoluteEncoder.getDistance() * 3 / 10) > Math.PI * 89 / 90) {
-      goalAngle = (m_absoluteEncoder.getDistance() * 3 / 10) - Math.PI / 2;
-      backInvertMotors();
-      setGoal(goalAngle);
-      enable();
- 
-      System.out.println("going backward to pi/2");
-    } 
-
-    if (calledAngle == Math.PI
-        && (m_absoluteEncoder.getDistance() * 3 / 10) < Math.PI * 178 / 180) {
-      goalAngle = Math.PI - (m_absoluteEncoder.getDistance() * 3 / 10);
-      forwardInvertMotors();
-      setGoal(goalAngle);
-      enable();
-
-      System.out.println("going forward to pi");
-    }
-
-    if (calledAngle == Math.PI
-        && (m_absoluteEncoder.getDistance() * 3 / 10) > Math.PI) {
-      goalAngle = (m_absoluteEncoder.getDistance() * 3 / 10) - Math.PI;
-      backInvertMotors();
-      setGoal(goalAngle);
-      enable();
-
-      System.out.println("going backward to pi");
-    }
-  } */
 
   private void configureMotors() {
     m_armLeft.restoreFactoryDefaults();
@@ -201,6 +149,57 @@ public class Arm extends ProfiledPIDSubsystem {
     if(!m_limitSwitch.get() && moveForward == false){
       disable();
     }
+
+
+    if (calledAngle == 0) {
+      goalAngle = (m_absoluteEncoder.getDistance() * 3 / 10);
+      backInvertMotors();
+      setGoal(goalAngle);
+      enable();
+
+      System.out.println("going back to 0");
+    }
+ 
+    if (calledAngle == Math.PI / 2
+        && (m_absoluteEncoder.getDistance() * 3 / 10) < Math.PI * 89 / 180) {
+      goalAngle = Math.PI / 2 - (m_absoluteEncoder.getDistance() * 3 / 10);
+      forwardInvertMotors();
+      setGoal(goalAngle);
+      enable();
+
+      System.out.println("going forward to pi/2");
+    }
+
+    if (calledAngle == Math.PI / 2
+        && (m_absoluteEncoder.getDistance() * 3 / 10) > Math.PI * 91 / 180) {
+      goalAngle = (m_absoluteEncoder.getDistance() * 3 / 10) - Math.PI / 2;
+      backInvertMotors();
+      setGoal(goalAngle);
+      enable();
+ 
+      System.out.println("going backward to pi/2");
+    } 
+
+    if (calledAngle == Math.PI
+        && (m_absoluteEncoder.getDistance() * 3 / 10) < Math.PI * 178 / 180) {
+      goalAngle = Math.PI - (m_absoluteEncoder.getDistance() * 3 / 10);
+      forwardInvertMotors();
+      setGoal(goalAngle);
+      enable();
+
+      System.out.println("going forward to pi");
+    }
+
+    if (calledAngle == Math.PI
+        && (m_absoluteEncoder.getDistance() * 3 / 10) > Math.PI) {
+      goalAngle = (m_absoluteEncoder.getDistance() * 3 / 10) - Math.PI;
+      backInvertMotors();
+      setGoal(goalAngle);
+      enable();
+      
+      System.out.println("going backward to pi");
+    }
+
       super.periodic();
   }
 
