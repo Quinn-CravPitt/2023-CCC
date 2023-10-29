@@ -82,6 +82,14 @@ public class RobotContainer {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     // arm button mapping
 
+
+    /*NOTE FOR FUTURE READERS
+     * 
+     * this method of controlling the arm is not very good because it only gets feedback in the beginning 
+     * when you press the button, not the entire way through. Quinn-Experimental-PID-Changes should have 
+     * a better system
+     */
+
     m_XboxController
         .x()
         .onTrue(
