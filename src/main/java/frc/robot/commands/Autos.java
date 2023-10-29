@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Shooter;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.ExampleSubsystem;
 
@@ -59,6 +60,39 @@ public final class Autos {
                     0, 0)),
             shooter));
   }
+
+  
+  public static CommandBase scoreHighRaiseArm(Shooter shooter, Arm m_Arm, DriveTrain DifferentialDrive) {
+    return Commands.sequence(
+        Commands.runOnce(
+            () -> {
+              
+            shooter.ShootCube(ShooterConstants.shootMidSpeed, ShooterConstants.shootMidSpeed);
+
+            },
+            shooter),
+        //wait for x seconds to shoot cube 
+        new WaitCommand(.5),
+        
+        //set roller speeds to zero 
+        Commands.runOnce(
+            () ->
+                shooter.ShootCube(
+                    0, 0),
+            shooter),
+        Commands.runOnce(
+            () -> {
+              
+              m_Arm.goalAngle = (Math.PI / 2 - (m_Arm.m_absoluteEncoder.getDistance() * 3 / 10));
+              m_Arm.forwardInvertMotors();
+              m_Arm.setGoal(m_Arm.goalAngle);
+              m_Arm.enable();
+  
+              },
+              shooter));
+
+  }
+  
 
   private Autos() {
     throw new UnsupportedOperationException("This is a utility class!");
